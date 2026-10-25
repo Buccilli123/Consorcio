@@ -1,0 +1,143 @@
+// Esquema de datos de la plataforma de consorcios.
+// Diseño y reglas: obsidian-vault/02 Arquitectura/Modelo de datos inicial.md
+// Aislamiento entre consorcios: obsidian-vault/Decisiones/ADR-003 Aislamiento multi-tenant.md
+//
+// Convención de aislamiento: toda tabla que pertenece a un consorcio lleva
+// `consortiumId`, y sus relaciones con otras tablas del consorcio usan una FK
+// compuesta (consortiumId, id). Así la base rechaza vínculos entre consorcios
+// distintos aunque falle la lógica de la aplicación.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MembershipRole {
+  ADMIN // administra el consorcio
+  OWNER // propietario de una o más unidades
+  TENANT // inquilino o residente
+  STAFF // personal operativo (encargado, mantenimiento)
+}
+
+enum MembershipStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+model User {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  /// Siempre en minúsculas (lo garantiza un CHECK en la migración).
+  email        String   @unique
+  name         String
+  /// Hash de la contraseña; nunca se guarda ni se registra la contraseña en claro.
+  passwordHash String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+
+  memberships Membership[]
+  sessions    Session[]
+  auditEvents AuditEvent[]
+}
+
+model Session {
+  id        String    @id @default(uuid(7)) @db.Uuid
+  /// SHA-256 del token de sesión; el token en claro solo vive en la cookie.
+  tokenHash String    @unique
+  userId    String    @db.Uuid
+  expiresAt DateTime  @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Consortium {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  name      String
+  address   String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  units           Unit[]
+  memberships     Membership[]
+  unitAssignments UnitAssignment[]
+  auditEvents     AuditEvent[]
+}
+
+model Unit {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  consortiumId String   @db.Uuid
+  /// Identificador visible dentro del consorcio, por ejemplo "3B" o "Local 2".
+  code         String
+  floor        String?
+  /// Porcentaje fiscal para prorratear expensas (0 < x ≤ 100, 4 decimales).
+  coefficient  Decimal  @db.Decimal(7, 4)
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+
+  consortium  Consortium       @relation(fields: [consortiumId], references: [id], onDelete: Restrict)
+  assignments UnitAssignment[]
+
+  @@unique([consortiumId, code])
+  @@unique([consortiumId, id])
+}
+
+model Membership {
+  id           String           @id @default(uuid(7)) @db.Uuid
+  userId       String           @db.Uuid
+  consortiumId String           @db.Uuid
+  role         MembershipRole
+  status       MembershipStatus @default(ACTIVE)
+  createdAt    DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime         @updatedAt @db.Timestamptz(3)
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Restrict)
+  consortium  Consortium       @relation(fields: [consortiumId], references: [id], onDelete: Restrict)
+  assignments UnitAssignment[]
+
+  // Un usuario puede tener varios roles en un consorcio (por ejemplo,
+  // propietario y personal operativo), pero cada rol una sola vez.
+  @@unique([userId, consortiumId, role])
+  @@unique([consortiumId, id])
+  @@index([consortiumId])
+}
+
+/// Vincula una membresía OWNER o TENANT con las unidades que le corresponden.
+model UnitAssignment {
+  consortiumId String   @db.Uuid
+  unitId       String   @db.Uuid
+  membershipId String   @db.Uuid
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+
+  consortium Consortium @relation(fields: [consortiumId], references: [id], onDelete: Restrict)
+  unit       Unit       @relation(fields: [consortiumId, unitId], references: [consortiumId, id], onDelete: Cascade)
+  membership Membership @relation(fields: [consortiumId, membershipId], references: [consortiumId, id], onDelete: Cascade)
+
+  @@id([unitId, membershipId])
+  @@index([consortiumId, membershipId])
+}
+
+/// Registro de acciones relevantes. Solo se insertan filas: nunca se editan ni borran.
+model AuditEvent {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  consortiumId String?  @db.Uuid
+  actorUserId  String?  @db.Uuid
+  /// Acción con formato "entidad.verbo", por ejemplo "membership.create".
+  action       String
+  entityType   String
+  entityId     String?
+  /// Datos adicionales sin información sensible (ni contraseñas ni tokens).
+  metadata     Json?
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+
+  consortium Consortium? @relation(fields: [consortiumId], references: [id], onDelete: Restrict)
+  actor      User?       @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+
+  @@index([consortiumId, createdAt])
+}

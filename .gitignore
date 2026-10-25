@@ -1,0 +1,54 @@
+# Dependencias
+/node_modules
+/.pnp
+.pnp.*
+
+# Tests y cobertura
+/coverage
+/test-results
+/playwright-report
+
+# Next.js
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# Prisma: cliente generado
+/src/generated/
+
+# Variables de entorno: nunca versionar valores reales.
+# Solo se versiona la plantilla con valores ficticios.
+.env*
+!.env.example
+
+# Secretos, claves y certificados
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Datos y respaldos de base de datos
+*.sql.gz
+*.dump
+*.backup
+/backups/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Obsidian: estado local del editor (la configuración compartida sí se versiona)
+obsidian-vault/.obsidian/workspace*.json
+obsidian-vault/.obsidian/cache
+obsidian-vault/.trash/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code: configuración local personal
+.claude/settings.local.json
