@@ -6,6 +6,13 @@ tags: [adr, seguridad, postgres]
 ---
 # ADR-005 — Roles de base de datos con mínimo privilegio
 
+> **Resumen.** La app nunca usa `postgres`.
+> - **`consorcio_app`** (app y tests): solo `SELECT/INSERT/UPDATE/DELETE`, sin DDL ni `TRUNCATE`.
+> - **`consorcio_migrator`** (Prisma CLI): dueño del esquema en dev y test, y de `consorcio_shadow`.
+> - **Aislamiento:** `pg_hba.conf` limita cada rol a sus bases (rechaza `postgres` y `planificador`).
+> - **Scripts sin contraseñas:** `scripts/db/01-roles.sql` y `02-schema-grants.sql`.
+> - **Variables:** `DATABASE_URL`, `MIGRATE_DATABASE_URL`, `SHADOW_DATABASE_URL`, `TEST_DATABASE_URL` y `TEST_MIGRATE_DATABASE_URL`.
+
 ## Contexto
 La app se conectaba como `postgres`, que es superusuario. En el mismo servidor hay otra base ajena al proyecto (`planificador`) que no se debe tocar.
 

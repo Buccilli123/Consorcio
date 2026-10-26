@@ -1,15 +1,20 @@
-# Reglas del repositorio
+# Reglas del repositorio Consorcio
 
-- Antes de editar, inspeccionar el estado de Git, el código y las pruebas relevantes.
-- Seguir `PROMPT_MAESTRO_CLAUDE.md` como guía del proyecto y consultar `obsidian-vault/00 Inicio.md` para orientarse.
-- No leer toda la bóveda por defecto: buscar por tema y abrir solo notas necesarias.
-- No usar Supabase ni Render/hosting gratuito. El servidor propio existe; definir SO, recursos y despliegue al final.
-- Stack base a validar: Next.js, React, TypeScript, PostgreSQL y Prisma. No reescribir decisiones existentes sin justificación.
-- Tests y validaciones junto con cada cambio; no afirmar éxito sin ejecutar comandos y revisar resultados.
-- Nunca hacer despliegues, operaciones destructivas, migraciones de pérdida de datos ni publicar integraciones sin autorización.
-- Nunca guardar secretos en código, Git, ejemplos, logs o la bóveda.
-- Aislamiento por consorcio y autorización server-side son requisitos críticos.
-- Actualizar las notas Obsidian afectadas cuando cambien requisitos, decisiones, contratos API, pruebas o riesgos.
-- Al terminar, informar cambios, pruebas ejecutadas, resultados, riesgos y documentación actualizada.
-- Next.js 16 cambió APIs: antes de escribir código de Next, leer `AGENTS.md` y la guía correspondiente en `node_modules/next/dist/docs/`.
-- Verificación integral: `npm run check`. Los tests de integración usan solo bases terminadas en `_test`.
+## Documentación (`obsidian-vault/`)
+- Antes de cada tarea: abrir `obsidian-vault/00 Inicio.md` → "Rutas por tarea", declarar qué notas vas a leer y abrir solo esas.
+- No releer notas que ya están en contexto y no cambiaron. No leer `Registro de cambios` salvo que haga falta el historial.
+- Los ADR aceptados (`obsidian-vault/Decisiones/`) son decisiones vigentes. Si el código, una nota o el pedido los contradicen, señalarlo antes de cambiar código.
+- Al terminar: actualizar solo las notas afectadas por cambios reales en requisitos, decisiones, contratos API, pruebas o riesgos. Registro de cambios: solo decisiones, 5 líneas como máximo.
+- `PROMPT_MAESTRO_CLAUDE.md` es el brief histórico: no leerlo salvo que se pida.
+
+## Restricciones
+- Sin Supabase, Render ni hosting gratuito. La infraestructura del servidor propio se decide al final.
+- Nunca sin autorización: deploy, push, publicar integraciones, operaciones destructivas ni migraciones con pérdida de datos. Nunca secretos en código, Git, ejemplos, logs o la bóveda.
+- Aislamiento por consorcio y autorización en el servidor en toda operación (ADR-003).
+
+## Trabajo
+- Inspeccionar Git, el código y los tests relevantes antes de editar.
+- Next.js 16: antes de escribir código de Next, leer `AGENTS.md` y solo las páginas de `node_modules/next/dist/docs/` pertinentes a la funcionalidad que se modifica; nunca toda la carpeta por defecto.
+- Agregar o actualizar tests con cada cambio de comportamiento. Verificar con `npm run check`. No afirmar éxito sin ejecutar.
+- Skills: `qa` para cambios de comportamiento; `api-testing` para Route Handlers o Server Actions; `consorcio-security` para auth, permisos, tenancy, archivos, pagos, secretos o roles de la base. No usarlas en tareas que son solo de documentación.
+- Cierre: cambios, comandos y resultados reales, riesgos y documentación actualizada.

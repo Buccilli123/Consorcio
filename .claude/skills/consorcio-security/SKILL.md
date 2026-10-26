@@ -1,6 +1,6 @@
 ---
 name: consorcio-security
-description: Revisa cambios con impacto en autenticación, autorización, datos personales, archivos, sesiones, pagos, aislamiento multi-tenant o configuración.
+description: Revisa cambios con impacto en autenticación, sesiones, autorización, aislamiento multi-tenant, datos personales, archivos, pagos, secretos o roles y permisos de la base. Usar antes de cerrar ese tipo de cambio. No usar en cambios de estilos, textos o documentación sin impacto en seguridad.
 ---
 
 # Skill: revisión de seguridad

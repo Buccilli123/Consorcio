@@ -34,20 +34,24 @@ Cada módulo se da por terminado solo si se cumplen sus criterios y los generale
 ## 4. Reclamos
 - OWNER y TENANT crean reclamos asociados a su unidad y ven solo los suyos.
 - El ADMIN asigna al STAFF y cambia el estado siguiendo transiciones válidas (abierto → en curso → resuelto → cerrado, o reabierto).
-- Cada cambio queda en un historial que no se puede modificar, con autor y fecha.
+- Los miembros con acceso al reclamo pueden comentarlo. Se cierra al final del flujo.
+- Cada cambio (estado, asignación, comentario) queda en un historial que no se puede modificar, con autor y fecha.
 
 ## 5. Reservas
+- Flujo: consultar disponibilidad → solicitar → validar reglas y conflictos → confirmar o cancelar.
 - No hay dos reservas activas solapadas en el mismo espacio, **ni siquiera con solicitudes simultáneas** (lo garantiza la base y lo verifica un test concurrente).
 - Zona horaria: America/Argentina/Buenos_Aires.
 
 ## 6. Documentos
 - Se validan el tipo y el tamaño. El archivo se guarda en almacenamiento privado y la descarga se autoriza en el servidor.
+- Las subidas, descargas y eliminaciones quedan en la auditoría.
 
 ## 7. Expensas
 - Cargos = gastos comunes × coeficiente + gastos particulares de cada unidad.
 - El redondeo a centavos se documenta, y la suma de los cargos coincide exactamente con el total del período.
 - Un período cerrado no se modifica: las correcciones se hacen con ajustes en un período posterior.
-- Los pagos se registran a mano. El saldo de una unidad = cargos − pagos, auditable.
+- Flujo: consultar período y unidad → ver conceptos y saldo → registrar el pago según las reglas aprobadas → emitir el comprobante si corresponde.
+- Los pagos se registran a mano, sin asumir integración bancaria ni proveedores de pago. El saldo de una unidad = cargos − pagos, auditable.
 - **Autorización** (tests obligatorios del módulo):
   - OWNER y TENANT ven importes, vencimientos y estado de pago solo de las unidades asignadas a su membresía.
   - Pedir otra unidad del mismo consorcio → 404. Pedir una unidad de otro consorcio → 404.
@@ -59,4 +63,4 @@ Cada módulo se da por terminado solo si se cumplen sus criterios y los generale
 - Reglas de cada reserva (anticipación, duración máxima, cupos): se definen con el módulo.
 - Política de redondeo de las expensas: propuesta en el módulo 7, a validar.
 
-Enlaces: [[Flujos críticos]], [[Visión y MVP]], [[Modelo de datos inicial]]
+Enlaces: [[Visión y MVP]], [[Modelo de datos inicial]], [[Roles y permisos]], [[Interfaz y UX]]
