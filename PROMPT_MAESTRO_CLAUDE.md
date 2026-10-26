@@ -1,3 +1,5 @@
+> **Documento histórico (brief inicial del 2026-10-25).** No es una instrucción vigente ni se carga en cada tarea. Las reglas actuales están en `CLAUDE.md`, y las decisiones en `obsidian-vault/` (empezar por `00 Inicio.md`). La "Primera tarea" de este brief (auditoría inicial) ya se completó.
+
 # PROMPT MAESTRO — CLAUDE CODE
 ## Proyecto: plataforma de gestión de consorcios
 

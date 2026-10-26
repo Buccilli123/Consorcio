@@ -1,6 +1,6 @@
 ---
 name: api-testing
-description: Diseña, documenta y prueba contratos HTTP/API usando las pruebas del repositorio y, cuando esté configurado, Postman CLI/plugin/MCP.
+description: Diseña, documenta y prueba contratos HTTP/API (Route Handlers y Server Actions) usando las pruebas del repositorio y, si está configurado, Postman. Usar al crear o cambiar un endpoint o una acción. No usar para lógica de dominio pura sin interfaz HTTP ni para tareas de documentación.
 ---
 
 # Skill: pruebas de API

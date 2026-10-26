@@ -1,6 +1,6 @@
 ---
 name: qa
-description: Planifica y ejecuta control de calidad de una funcionalidad o cambio, incluyendo casos positivos, negativos, regresión y evidencias. Usar antes de dar por terminada una tarea.
+description: Planifica y ejecuta el control de calidad de una funcionalidad o corrección que cambia el comportamiento (casos positivos, negativos, regresión y evidencias). Usar antes de dar por terminado ese tipo de cambio. No usar en tareas que son solo de documentación, configuración del entorno o investigación.
 ---
 
 # Skill: QA de funcionalidad

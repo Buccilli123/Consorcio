@@ -12,14 +12,7 @@ tags: [qa, testing]
 - E2E: flujos críticos del usuario, solo cuando la infraestructura esté lista.
 
 ## Por feature
-1. Definir criterios de aceptación.
-2. Probar camino feliz.
-3. Probar entradas inválidas y límites.
-4. Probar 401/403 y acceso cruzado entre consorcios.
-5. Probar duplicados, concurrencia y fallos relevantes.
-6. Ejecutar tests, lint, typecheck y build disponibles.
-7. Informar comandos y resultados reales.
-8. Registrar fallas conocidas sin ocultarlas.
+El procedimiento está en la skill `qa` (`.claude/skills/qa/SKILL.md`): criterios, matriz de casos (feliz, inválidos, 401/403, acceso cruzado, límites, concurrencia), ejecución e informe. Los criterios del proyecto están en [[Criterios de aceptación MVP]] (G1–G5 y la sección del módulo).
 
 ## Herramientas y comandos
 | Comando | Qué hace |

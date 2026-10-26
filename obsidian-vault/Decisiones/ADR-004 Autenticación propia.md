@@ -6,6 +6,14 @@ tags: [adr, seguridad, autenticacion]
 ---
 # ADR-004 — Autenticación propia con email y contraseña
 
+> **Resumen.** Login con email y contraseña, sin librerías de auth.
+> - **Contraseñas:** `scrypt` N=2^17, r=8, p=1, con `maxmem` de 256 MiB (sin eso Node lo rechaza) y como máximo 2 hashes simultáneos.
+> - **Sesiones en la base:** se guarda el SHA-256 del token; vencen a los 7 días de inactividad (deslizante) y a los 30 días como máximo, y se revocan en logout o cambio de contraseña.
+> - **Cookie y CSRF:** cookie `__Host-` `HttpOnly` `SameSite=Lax`; chequeo de Origin propio en Route Handlers (las Server Actions ya lo traen).
+> - **Rate limiting:** 5 fallos por email y 20 por IP, cada 15 minutos.
+> - **Logs:** nunca contraseñas ni tokens.
+> - **Esquema:** requiere las tablas `LoginAttempt` y `PasswordResetToken`.
+
 ## Contexto
 Decisión de producto (2026-10-25): el MVP usa login con email y contraseña, y la autenticación es el primer módulo de la Etapa 3. No hay proveedor de correo definido. Este ADR fija el diseño; pasa a "implementada" cuando el módulo cumpla sus criterios en [[Criterios de aceptación MVP]].
 

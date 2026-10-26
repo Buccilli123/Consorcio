@@ -11,19 +11,14 @@ tags: [qa, api, postman]
 - OpenAPI: contrato compartido si el proyecto lo soporta.
 
 ## Casos mínimos por endpoint
-- Correcto y autenticado.
-- Sin autenticar.
-- Autenticado sin permiso.
-- Usuario de otro consorcio.
-- Recurso inexistente.
-- Body/query inválidos y campos faltantes.
-- Duplicado, límites y concurrencia cuando aplique.
-- Error de dependencia y formato de error consistente.
+El procedimiento general está en la skill `api-testing`. Lo propio de este proyecto:
+- Códigos según [[ADR-003 Aislamiento multi-tenant]]: sin sesión → 401; miembro sin permiso → 403; recurso de otro consorcio o inexistente → 404, con el mismo mensaje.
+- Route Handlers que cambian estado: Origin no permitido → 403 ([[ADR-004 Autenticación propia]]).
+- Además: camino feliz autenticado, body o query inválidos, duplicados, límites y concurrencia cuando aplique, error de dependencia y formato de error consistente.
 
 ## Seguridad operativa
-- No versionar tokens ni API keys.
-- No apuntar a producción sin autorización.
-- Usar datos sintéticos y entornos local/staging.
-- No publicar colecciones ni documentación sin revisión.
+- Usar solo datos sintéticos y entornos local o de staging autorizado.
+- Las demás reglas (sin tokens ni API keys versionados, sin producción ni publicación sin autorización) están en la skill `api-testing`.
+- Postman todavía no está configurado (ver `SETUP.md`).
 
 Enlaces: [[Plan QA]], [[Seguridad y privacidad]]

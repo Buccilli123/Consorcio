@@ -32,6 +32,10 @@ Mantener entradas breves y con fecha. Registrar solo cambios de requisitos, deci
 - Tests/validación: ver el informe del primer commit (`npm run check`).
 - Pendiente: implementar el módulo de autenticación (Etapa 3).
 
+## 2026-10-25 — Protocolo de consulta de la documentación
+- Cambio: `CLAUDE.md` exige consultar [[00 Inicio]] → "Rutas por tarea" y leer solo esas notas. `PROMPT_MAESTRO` pasa a ser histórico. Nueva nota [[Interfaz y UX]]; [[Flujos críticos]] queda unificada en [[Criterios de aceptación MVP]]; las reglas de migraciones están en [[Modelo de datos inicial]]; riesgos abiertos en [[Seguridad y privacidad]].
+- Validación: enlaces verificados; no se tocó código.
+
 ## Plantilla
 ### AAAA-MM-DD — Tema
 - Cambio:
